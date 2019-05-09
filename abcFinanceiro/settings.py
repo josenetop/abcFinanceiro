@@ -27,6 +27,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# Utilizando o proprio Model para os Usuários
+AUTH_USER_MODEL = 'app_accounts.User'
 
 # Application definition
 
@@ -39,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'app_accounts',
+    #'app_home',
 ]
 
 MIDDLEWARE = [
@@ -82,6 +85,16 @@ DATABASES = {
     }
 }
 
+'''DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'abcfinanceiro',
+        'USER': 'root',
+        'PASSWORD': '',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
+    }
+}'''
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -124,6 +137,8 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = 'media'
 
 LOGIN_URL = '/login/'
+
+LOGIN_REDIRECT_URL = 'home'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 

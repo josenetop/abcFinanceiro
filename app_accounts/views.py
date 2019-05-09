@@ -1,36 +1,34 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import View
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, user_logged_in
 from django.contrib.auth.decorators import login_required
-from django.http import (HttpResponse,
-                        HttpResponseRedirect,
-                        HttpResponseForbidden,
-                        HttpResponseBadRequest,
-                        JsonResponse)
+from django.http import __all__
+
 from app_accounts.models import *
-
-from django.views.generic.base import TemplateView
-
 # Create your views here.
-class login(View):
+
+class Login(View):
     context = {}
     def get(self, request):
-        template_name = 'login.html'
-        print('entrou no get')
-        return render(resquest, template_name)
-    
+        template_name = 'registration/login.html'
+        return render(request, template_name, self.context)
+
     def post(self, request):
-        context = {}
-        username = request.POST['username']
+        usuario = request.POST['email']
         senha = request.POST['senha']
-        user = authenticate(user=username, password=senha)
+        user = authenticate(username=usuario, password=senha)
+        print(user)
         if user is not None:
-            print('Está logando')
             login(request, user)
             if not request.user.is_anonymous:
-                usuario = DefaultUser.objects.get(usuario=request.user.id_usuario)
-                context['mensagem'] = 'Passou!'
-                return render(request, context)
+                username = auth_user.object.get(username=request.user.id)
+                return render(request, 'home.html')
         else:
-            context['mensagem'] = 'Email ou senha incorretos!'
-            return render(request, 'login.html', context)
+            context['mensagem'] = 'Usuário ou senha incorretos!'
+            return render(request, 'registration/login.html', context)
+
+#class Logout(View):
+#    def get(self, request):
+#        if request.user.is_authenticated:
+#            logout(request)
+#            return render(request, 'registration/login.html')

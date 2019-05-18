@@ -1,4 +1,6 @@
+# -*- coding: UTF-8 -*-
 from django.db import models
+from django.contrib.auth.models import User
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 from django.core import validators
 from django.utils.translation import ugettext_lazy as _
@@ -11,17 +13,17 @@ class UserManager(BaseUserManager):
     def _create_user(self, username, email, password, is_staff, is_superuser, **extra_fields):
         now = timezone.now()
         if not username:
-            raise ValueError(_('O nome de usuário fornecido deve ser definido'))
+            raise ValueError(_('O nome de usuario fornecido deve ser definido'))
         email = self.normalize_email(email)
-        user = self.model(username=username, email=email, is_staff=is_staff, is_active=True, is_superuser=is_superuser, last_login=now, date_joined=now, **extra_fields)
+        user = self.model(username=username, email=email, is_staff=is_staff, is_active=True, is_superuser=is_superuser, last_login=now, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_user(self, username, email=None,password=None, **extra_fields):
+    def create_user(self, username=None, email=None,password=None, **extra_fields):
         return self._create_user(username, email, password, False, False, **extra_fields)
 
-    def create_superuser(username, email, password, **extra_fields):
+    def create_superuser(self,username, email, password, **extra_fields):
         user=self._create_user(username, email, password, True, True, **extra_fields)
         user.is_staff=True
         user.save(using=self._db)
@@ -37,7 +39,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = models.CharField(_('email'), max_length=75, unique=True)
     is_staff  = models.BooleanField(_('staff status'), default=False)
     is_active = models.BooleanField(_('active'), default=True)
-    is_trusty = models.BooleanField(_('trusty'), default=False, help_text=_('Designa se este usuário confirmou sua conta.'))
+    is_trusty = models.BooleanField(_('trusty'), default=False, help_text=_('Designa se este usuario confirmou sua conta.'))
     
     USERNAME_FIELD = 'email'
     #USERNAME_FIELD: essa variável recebe o campo do model que será utilizado pelo Django para autenticação. 

@@ -21,11 +21,11 @@ class Login(View):
         if user is not None:
             login(request, user)
             if not request.user.is_anonymous:
-                username = auth_user.object.get(username=request.user.id)
+                username = User.objects.get(username=request.user.username)
                 return render(request, 'home.html')
         else:
-            context['mensagem'] = 'Usuário ou senha incorretos!'
-            return render(request, 'registration/login.html', context)
+            self.context['mensagem'] = 'Usuário ou senha incorretos!'
+            return render(request, 'registration/login.html', self.context)
 
 #class Logout(View):
 #    def get(self, request):
